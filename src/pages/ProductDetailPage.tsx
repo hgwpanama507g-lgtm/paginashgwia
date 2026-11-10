@@ -22,12 +22,16 @@ import {
   Award
 } from 'lucide-react';
 
+import { useParams } from 'react-router-dom';
+
 interface ProductDetailPageProps {
-  slug: string;
+  slug?: string;
 }
 
-export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({ slug }) => {
+export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({ slug: propSlug }) => {
   const { navigate } = useRouter();
+  const { slug: paramSlug } = useParams<{ slug: string }>();
+  const slug = paramSlug || propSlug || '';
   const { addItem } = useCart();
   const [quantity, setQuantity] = useState(1);
   const [copied, setCopied] = useState(false);
@@ -291,10 +295,13 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({ slug }) =>
         </h2>
 
         <div className="bg-white rounded-3xl border border-gray-200 p-6 sm:p-10 space-y-6">
-          <div className="prose max-w-none text-black">
-            <p className="text-[17px] text-black leading-relaxed whitespace-pre-line">
-              {product.fullDescription}
-            </p>
+          <div className="prose prose-emerald max-w-none text-black 
+            [&>p]:text-[16px] [&>p]:leading-[1.7] [&>p]:mb-4 [&>p]:max-w-[75ch]
+            [&>h3]:text-xl [&>h3]:font-bold [&>h3]:text-[#007A3D] [&>h3]:mt-8 [&>h3]:mb-4
+            [&>li]:text-[16px] [&>li]:leading-[1.7] [&>li]:list-disc [&>li]:ml-6 [&>li]:mb-2
+            [&>blockquote]:border-l-4 [&>blockquote]:border-[#007A3D] [&>blockquote]:bg-emerald-50 [&>blockquote]:p-4 [&>blockquote]:italic [&>blockquote]:text-gray-800 [&>blockquote]:mb-4
+          ">
+            <div dangerouslySetInnerHTML={{ __html: product.fullDescription }} />
           </div>
 
           {/* Quality & Origin Seals */}

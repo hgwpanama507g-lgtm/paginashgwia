@@ -19,12 +19,16 @@ import {
   ShoppingBag
 } from 'lucide-react';
 
+import { useParams } from 'react-router-dom';
+
 interface ArticleDetailPageProps {
-  slug: string;
+  slug?: string;
 }
 
-export const ArticleDetailPage: React.FC<ArticleDetailPageProps> = ({ slug }) => {
+export const ArticleDetailPage: React.FC<ArticleDetailPageProps> = ({ slug: propSlug }) => {
   const { navigate } = useRouter();
+  const { slug: paramSlug } = useParams<{ slug: string }>();
+  const slug = paramSlug || propSlug || '';
   const [copied, setCopied] = useState(false);
 
   const article = getArticleBySlug(slug);

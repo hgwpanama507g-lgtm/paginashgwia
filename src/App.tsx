@@ -1,10 +1,5 @@
-/**
- * @license
- * SPDX-License-Identifier: Apache-2.0
- */
-
 import React from 'react';
-import { RouterProvider, useRouter } from './context/RouterContext';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { CartProvider } from './context/CartContext';
 import { Header } from './components/Header';
 import { Footer } from './components/Footer';
@@ -21,76 +16,47 @@ import { AfiliacionPage } from './pages/AfiliacionPage';
 import { CombosPage } from './pages/CombosPage';
 import { ContactoPage } from './pages/ContactoPage';
 
-const AppContent: React.FC = () => {
-  const { path } = useRouter();
+const NotFound: React.FC = () => (
+  <div className="max-w-4xl mx-auto px-4 py-20 text-center space-y-6">
+    <h1 className="text-4xl font-extrabold text-black">404 - Página no encontrada</h1>
+    <p className="text-[17px] text-black">Lo sentimos, la página que buscas no existe.</p>
+    <a href="/" className="inline-block px-6 py-3 rounded-xl bg-[#007A3D] text-white font-bold">
+      Volver al inicio
+    </a>
+  </div>
+);
 
-  const renderRoute = () => {
-    // Clean trailing slashes
-    const cleanPath = path === '/' ? '/' : path.replace(/\/+$/, '');
-
-    // Product detail route: /producto/:slug or /productos/:slug
-    if (cleanPath.startsWith('/producto/')) {
-      const slug = cleanPath.replace('/producto/', '');
-      return <ProductDetailPage slug={slug} />;
-    }
-    if (cleanPath.startsWith('/productos/') && cleanPath !== '/productos') {
-      const slug = cleanPath.replace('/productos/', '');
-      return <ProductDetailPage slug={slug} />;
-    }
-
-    // Blog article route: /blog/:slug
-    if (cleanPath.startsWith('/blog/') && cleanPath !== '/blog') {
-      const slug = cleanPath.replace('/blog/', '');
-      return <ArticleDetailPage slug={slug} />;
-    }
-
-    // Exact routes
-    switch (cleanPath) {
-      case '/':
-      case '':
-        return <HomePage />;
-      case '/productos':
-        return <ProductsPage />;
-      case '/blog':
-        return <BlogPage />;
-      case '/videos':
-        return <VideosPage />;
-      case '/afiliacion':
-      case '/membresias':
-      case '/plan-de-compensacion':
-        return <AfiliacionPage />;
-      case '/combos':
-      case '/combos-hgw':
-        return <CombosPage />;
-      case '/contacto':
-      case '/sede':
-      case '/ubicacion':
-        return <ContactoPage />;
-      default:
-        // Check if path matches an article slug directly
-        return <HomePage />;
-    }
-  };
-
+const AppRoutes: React.FC = () => {
   return (
-    <div className="min-h-screen flex flex-col bg-[#FBFDF9] text-black">
-      <Header />
-      <main className="flex-1">
-        {renderRoute()}
-      </main>
-      <Footer />
-      <CartDrawer />
-      <WhatsAppFloatingButton />
-    </div>
+    <Routes>
+      <Route path="/" element={<HomePage />} />
+      <Route path="/productos" element={<ProductsPage />} />
+      <Route path="/producto/:slug" element={<ProductDetailPage slug={""} />} />
+      <Route path="/blog" element={<BlogPage />} />
+      <Route path="/blog/:slug" element={<ArticleDetailPage slug={""} />} />
+      <Route path="/videos" element={<VideosPage />} />
+      <Route path="/combos" element={<CombosPage />} />
+      <Route path="/afiliacion" element={<AfiliacionPage />} />
+      <Route path="/contacto" element={<ContactoPage />} />
+      <Route path="*" element={<NotFound />} />
+    </Routes>
   );
 };
 
 export default function App() {
   return (
-    <RouterProvider>
+    <BrowserRouter>
       <CartProvider>
-        <AppContent />
+        <div className="min-h-screen flex flex-col bg-[#FBFDF9] text-black">
+          <Header />
+          <main className="flex-1">
+            <AppRoutes />
+          </main>
+          <Footer />
+          <CartDrawer />
+          <WhatsAppFloatingButton />
+        </div>
       </CartProvider>
-    </RouterProvider>
+    </BrowserRouter>
   );
 }
