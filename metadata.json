@@ -1,0 +1,6 @@
+{
+  "name": "HGW Panamá - Health Green World Oficial",
+  "description": "Distribuidora oficial HGW Panamá. Productos naturales de arándano, turmalina, cuidado personal y nutrición. Envíos a todo Panamá por Servientrega.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
